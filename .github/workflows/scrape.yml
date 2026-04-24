@@ -2,8 +2,8 @@ name: Facebook Scraper Bot
 
 on:
   schedule:
-    - cron: '0 */6 * * *'   # প্রতি ৬ ঘণ্টায় রান হবে
-  workflow_dispatch:          # হাতেও চালানো যাবে
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
 
 jobs:
   scrape:
@@ -31,6 +31,7 @@ jobs:
         run: |
           git config --global user.email "bot@scraper.com"
           git config --global user.name "Scraper Bot"
+          git pull origin main --rebase
           git add data.json
           git diff --staged --quiet || git commit -m "🔄 Posts updated: $(date)"
           git push
