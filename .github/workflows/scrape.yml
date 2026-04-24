@@ -31,7 +31,9 @@ jobs:
         run: |
           git config --global user.email "bot@scraper.com"
           git config --global user.name "Scraper Bot"
-          git pull origin main --rebase
+          git fetch origin
+          git reset --hard origin/main
+          python scraper.py
           git add data.json
           git diff --staged --quiet || git commit -m "🔄 Posts updated: $(date)"
-          git push
+          git push origin main --force
