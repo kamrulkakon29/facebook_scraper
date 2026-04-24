@@ -1,0 +1,36 @@
+name: Facebook Scraper Bot
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # প্রতি ৬ ঘণ্টায় রান হবে
+  workflow_dispatch:          # হাতেও চালানো যাবে
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: রিপো চেকআউট
+        uses: actions/checkout@v4
+
+      - name: Python সেটআপ
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: লাইব্রেরি ইনস্টল
+        run: pip install requests beautifulsoup4
+
+      - name: স্ক্র্যাপার রান
+        run: python scraper.py
+
+      - name: data.json পুশ
+        run: |
+          git config --global user.email "bot@scraper.com"
+          git config --global user.name "Scraper Bot"
+          git add data.json
+          git diff --staged --quiet || git commit -m "🔄 Posts updated: $(date)"
+          git push
